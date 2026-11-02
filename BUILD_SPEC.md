@@ -174,7 +174,7 @@ This is the key visual. Draw it as inline SVG, `viewBox="0 0 1000 262"`, width 1
 Vertical positions (bar center yA = 108): top degree labels at y 74, bottom decimals at y 154, fractions at y 175, captions at y 198 (in) or 174 (mm), bottom axis title at y 252.
 7. Make the 0 and ±T labels bold in Kenall Blue. Make other labels regular gray.
 8. **Axis titles:** "DEGREES OFF SQUARE" above, "DIAGONAL (IN)" or "DIAGONAL (MM)" below.
-9. **Measured marker:** vertical Kenall Blue line with a downward triangle above the bar. If the value is off the scale, pin it to the end and label it "Off scale above" or "Off scale below".
+9. **Measured marker:** vertical Kenall Blue line with a downward triangle sitting on top of the bar (triangle from y = yA-25 to yA-10, white 1.5 px outline). Do not place the triangle at the height of the degree labels, or it covers a label when a reading lands on a labeled tick. If the value is off the scale, pin it to the end and label it "Off scale above" or "Off scale below".
 10. Wrap the SVG in a container with `overflow-x: auto` and give the SVG `min-width: 640px` so the labels never overlap on a phone.
 11. Add a legend below: green = within tolerance, red = out of tolerance, blue = measured diagonal.
 
@@ -184,6 +184,38 @@ Vertical positions (bar center yA = 108): top degree labels at y 74, bottom deci
 2. Enter each diagonal in the Measured field and read the angle above the marker.
 3. **Both readings in the green band:** the corner is square within tolerance.
 4. **Either reading in the red zone:** hold the part, tag it, and contact the Quality team before any rework.
+
+---
+
+## 4.5 Language Toggle (English / Spanish)
+
+1. Put an **EN | ES** segmented toggle in the header band, above "Quality Engineering". Active button: white background, Kenall Blue text. Inactive: transparent, white text.
+2. Store every user-facing string in one dictionary object with `en` and `es` keys. Mark static elements with `data-i18n="key"` and set their `innerHTML` from the dictionary when the language changes. Build dynamic strings (verdict, scale labels, sub-lines, error, placeholders, Done button) from the same dictionary each time they render.
+3. Set `<html lang>` to `en` or `es` when the language changes.
+4. Start language: saved choice in `localStorage` (`wsq-lang`), else Spanish if the browser language starts with `es`, else English.
+5. Numbers keep the period as the decimal separator in both languages (US shop convention). The comma is still accepted as input.
+6. Unit label: `in` in English, `pulg` in Spanish. The input parser also accepts a trailing `pulg` or `pulg.`.
+7. Keep L and W as formula symbols in both languages so they match the formula.
+8. The "A brand of Legrand" lockup is an official logo and stays in English.
+
+Key Spanish terms:
+
+| English | Spanish |
+|---|---|
+| Weldment Squareness Check | Verificación de Escuadra de Piezas Soldadas |
+| Quality Engineering | Ingeniería de Calidad |
+| Length / Width | Largo / Ancho |
+| Angle tolerance | Tolerancia del ángulo |
+| Measured diagonal | Diagonal medida |
+| Cross-corner dimension | Dimensión diagonal |
+| Min / Nominal / Max | Mín / Nominal / Máx |
+| Degrees off square | Grados fuera de escuadra |
+| In tolerance / Out of tolerance | En tolerancia / Fuera de tolerancia |
+| No reading / Check entry | Sin lectura / Revise el dato |
+| Done | Listo |
+| Hold the part and contact the Quality team. | Detenga la pieza y comuníquese con el equipo de Calidad. |
+
+Have a fluent Spanish speaker on the floor review the wording before rollout.
 
 ---
 
@@ -261,6 +293,8 @@ Light theme only. The logo rules allow Kenall Blue only on white backgrounds, so
 - [ ] On a phone in inches mode, the keyboard has space and slash keys.
 - [ ] Measured diagonal loads blank. It stays locked while Length or Width is blank, and unlocks after both are filled and the user clicks off.
 - [ ] Typing in Measured diagonal does not change the verdict until the user clicks off or taps Done.
+- [ ] EN/ES toggle switches every visible string, including the verdict, the scale labels, placeholders, and the Done button. The choice is remembered after a reload.
+- [ ] A reading exactly on a labeled tick (e.g. the MAX value) does not cover the degree label.
 - [ ] MIN fraction rounds up and MAX fraction rounds down.
 - [ ] Input fields stay inside the Inputs panel at desktop and phone widths.
 - [ ] Unit toggle converts the values and the scale relabels to MM.

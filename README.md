@@ -6,6 +6,10 @@ Kenall Quality Engineering tool for the welding team. Enter a weldment's length,
 
 Open `index.html` in any browser. It is one self-contained file and needs no install or internet connection, except for the web font, which falls back to Arial when offline.
 
+## Language
+
+Use the EN | ES toggle in the header to switch between English and Spanish. The choice is remembered on each computer.
+
 ## Inputs
 
 | Field | Accepts |
