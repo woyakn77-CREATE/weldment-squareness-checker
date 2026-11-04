@@ -1,6 +1,6 @@
 # Weldment Squareness Check
 
-Kenall Quality Engineering tool for the welding team. Enter a weldment's length, width, and corner angle tolerance (default ±0.5°). The tool returns the nominal, minimum, and maximum cross-corner (diagonal) dimensions, in decimals and to the nearest 1/32", on a scale that pairs degrees off square with diagonal length.
+Legrand Quality Engineering tool for the welding team. Enter a weldment's length, width, and corner angle tolerance (default ±0.5°). The tool returns the nominal, minimum, and maximum cross-corner (diagonal) dimensions, in decimals and to the nearest 1/32", on a scale that pairs degrees off square with diagonal length.
 
 ## Use
 
@@ -32,6 +32,6 @@ MIN fraction rounds up and MAX fraction rounds down, so both limits stay inside 
 
 ## Branding
 
-Uses Kenall and Legrand logos per the Kenall Brand Identity Manual. Get written approval from Kenall Marketing (marketing@kenall.com) before distributing outside Quality.
+Legrand branded (Process Black, Red 032, and the colored Legrand logo). Confirm logo use with Legrand Marketing before distributing outside Quality.
 
-Owner: Kenall Quality Engineering
+Owner: Legrand Quality Engineering

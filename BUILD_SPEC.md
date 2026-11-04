@@ -1,7 +1,7 @@
 # Build Spec: Weldment Squareness Check Tool
 
-**Audience:** An AI assistant building this tool for the Kenall welding team.
-**Owner:** Kenall Quality Engineering
+**Audience:** An AI assistant building this tool for the Legrand welding team.
+**Owner:** Legrand Quality Engineering
 **Output:** One self-contained HTML page (HTML, CSS, and JavaScript in a single file, no external dependencies except optional web fonts).
 **Primary use:** Desktop browser. Must also work on a phone.
 
@@ -23,8 +23,8 @@ Welders need to confirm a rectangular weldment (frame) is square. They measure t
 | Field | ID | Default | Unit | Rules |
 |---|---|---|---|---|
 | Units toggle | `u-in` / `u-mm` | Inches | in or mm | Switching converts the length, width, and measured values (x25.4 or /25.4) |
-| Length (L) | `len` | 48 | in/mm | Must be > 0 |
-| Width (W) | `wid` | 24 | in/mm | Must be > 0 |
+| Length (L) | `len` | 30 | in/mm | Must be > 0 |
+| Width (W) | `wid` | 40 | in/mm | Must be > 0 |
 | Angle tolerance (±) | `tol` | 0.5 | degrees | Must be > 0 and < 45. Hint text: "Default ±0.5° unless the print says otherwise." |
 | Measured diagonal | `meas` | **Blank** | in/mm | Optional. Locked until Length and Width are valid (see below) |
 
@@ -33,7 +33,7 @@ Length, width, and tolerance recalculate the readouts and scale live on every ke
 ### 2.0 Measured diagonal behavior
 
 1. Starts blank and disabled, with placeholder "Enter length and width first" and a dashed border.
-2. When the user leaves the Length or Width box (`change` event) and both hold valid numbers above zero, enable it. The placeholder changes to "e.g. 53 3/4" (in) or "e.g. 1363.5" (mm).
+2. When the user leaves the Length or Width box (`change` event) and both hold valid numbers above zero, enable it. The placeholder changes to "e.g. 50 1/8" (in) or "e.g. 1271.5" (mm).
 3. If Length or Width is cleared or made invalid, disable it again and ignore its value.
 4. The verdict and measured marker update only on `change` (Done button, Enter, or clicking off the box), not on every keystroke. This stops the verdict from flashing while a value like `53 3/` is half typed.
 5. Hint text: "Measure corner to corner. Check both diagonals and enter each one. The check runs when you tap Done or click off the box."
@@ -118,6 +118,7 @@ Rounding the limits to the nearest 1/32 can place the fraction just outside the 
 | L | W | T | Expected Nominal | Expected Min | Expected Max |
 |---|---|---|---|---|---|
 | 48 in | 24 in | 0.5° | 53.666 (53 21/32") | 53.478 (53 1/2") | 53.853 (53 27/32") |
+| 30 in | 40 in | 0.5° | 50.000 (50") | 49.790 (49 13/16") | 50.209 (50 3/16") |
 | 72 1/8 in | 42-1/2 in | 0.5° | 83.715 (83 23/32") | 83.395 (83 13/32") | 84.034 (84 1/32") |
 | 1219.2 mm | 609.6 mm | 0.5° | 1363.11 | 1358.34 | 1367.86 |
 
@@ -141,10 +142,10 @@ Three tiles in a row (stack to one column on narrow screens):
 | Tile | Value | Sub-line |
 |---|---|---|
 | Min | d(-T), then fraction to the right (e.g. `53.478  53 1/2"`) | "-0.188 in (corner 89.50°)" |
-| Nominal | d(0), then fraction to the right (e.g. `53.666  53 21/32"`) | "Corner at 90.00°" (highlighted tile, Kenall Blue background, white text) |
+| Nominal | d(0), then fraction to the right (e.g. `53.666  53 21/32"`) | "Corner at 90.00°" (highlighted tile, black background, white text) |
 | Max | d(+T), then fraction to the right (e.g. `53.853  53 27/32"`) | "+0.187 in (corner 90.50°)" |
 
-Fraction styling: same line as the decimal (flex row, baseline aligned, wraps if narrow), about 19 px, semibold, 2767 80% (`#33507D`); 2767 30% (`#B2BDCE`) on the blue Nominal tile. Hide the fractions in mm mode.
+Fraction styling: same line as the decimal (flex row, baseline aligned, wraps if narrow), about 19 px, semibold, dark gray (`#4D4D4F`); light gray (`#C7C8CA`) on the black Nominal tile. Hide the fractions in mm mode.
 
 ### 4.2 Verdict bar
 
@@ -172,11 +173,11 @@ This is the key visual. Draw it as inline SVG, `viewBox="0 0 1000 262"`, width 1
 6. **Captions under the bottom labels:** "MIN" at -T, "NOMINAL" at 0, "MAX" at +T. Put them below the fraction row in inches mode and directly under the decimals in mm mode.
 
 Vertical positions (bar center yA = 108): top degree labels at y 74, bottom decimals at y 154, fractions at y 175, captions at y 198 (in) or 174 (mm), bottom axis title at y 252.
-7. Make the 0 and ±T labels bold in Kenall Blue. Make other labels regular gray.
+7. Make the 0 and ±T labels bold in black. Make other labels regular gray.
 8. **Axis titles:** "DEGREES OFF SQUARE" above, "DIAGONAL (IN)" or "DIAGONAL (MM)" below.
-9. **Measured marker:** vertical Kenall Blue line with a downward triangle sitting on top of the bar (triangle from y = yA-25 to yA-10, white 1.5 px outline). Do not place the triangle at the height of the degree labels, or it covers a label when a reading lands on a labeled tick. If the value is off the scale, pin it to the end and label it "Off scale above" or "Off scale below".
+9. **Measured marker:** vertical black line with a downward triangle sitting on top of the bar (triangle from y = yA-25 to yA-10, white 1.5 px outline). Do not place the triangle at the height of the degree labels, or it covers a label when a reading lands on a labeled tick. If the value is off the scale, pin it to the end and label it "Off scale above" or "Off scale below".
 10. Wrap the SVG in a container with `overflow-x: auto` and give the SVG `min-width: 640px` so the labels never overlap on a phone.
-11. Add a legend below: green = within tolerance, red = out of tolerance, blue = measured diagonal.
+11. Add a legend below: green = within tolerance, red = out of tolerance, black = measured diagonal.
 
 ### 4.4 How to measure (instructions panel)
 
@@ -189,14 +190,14 @@ Vertical positions (bar center yA = 108): top degree labels at y 74, bottom deci
 
 ## 4.5 Language Toggle (English / Spanish)
 
-1. Put an **EN | ES** segmented toggle in the header band, above "Quality Engineering". Active button: white background, Kenall Blue text. Inactive: transparent, white text.
+1. Put an **EN | ES** segmented toggle in the header band, above "Quality Engineering". Active button: black background, white text. Inactive: white background, black text, 1 px black border.
 2. Store every user-facing string in one dictionary object with `en` and `es` keys. Mark static elements with `data-i18n="key"` and set their `innerHTML` from the dictionary when the language changes. Build dynamic strings (verdict, scale labels, sub-lines, error, placeholders, Done button) from the same dictionary each time they render.
 3. Set `<html lang>` to `en` or `es` when the language changes.
 4. Start language: saved choice in `localStorage` (`wsq-lang`), else Spanish if the browser language starts with `es`, else English.
 5. Numbers keep the period as the decimal separator in both languages (US shop convention). The comma is still accepted as input.
 6. Unit label: `in` in English, `pulg` in Spanish. The input parser also accepts a trailing `pulg` or `pulg.`.
 7. Keep L and W as formula symbols in both languages so they match the formula.
-8. The "A brand of Legrand" lockup is an official logo and stays in English.
+8. The Legrand logo is not translated.
 
 Key Spanish terms:
 
@@ -219,52 +220,58 @@ Have a fluent Spanish speaker on the floor review the wording before rollout.
 
 ---
 
-## 5. Branding (Kenall Brand Identity Manual)
+## 5. Branding (Legrand)
+
+Source: the Legrand pages (p.18-19) of the Kenall Brand Identity Manual, which define the Legrand logo colors. No other brand marks appear on the page.
 
 ### 5.1 Colors
 
 | Token | Use | Hex | Source |
 |---|---|---|---|
-| Kenall Blue (PMS 2767) | Header band, headings, nominal tile, marker, active toggle | `#00245D` | p.12 |
-| 2767 80% | Unit labels | `#33507D` | p.12 |
-| 2767 50% | Input borders | `#7F91AE` | p.12 |
-| 2767 30% | Secondary text on blue | `#B2BDCE` | p.12 |
-| 2767 10% | Page background | `#E5E9EF` | p.12 |
-| 90% Black | Body text, scale ticks | `#404041` | p.12 |
-| 50% Black | Neutral pill | `#939598` | p.12 |
-| 20% Black | Panel borders | `#D1D3D4` | p.12 |
-| Pass green (Controls market color) | In-tolerance band and pill | `#41AD49` | p.12 |
-| Fail red (Exit & Emergency market color) | Out-of-tolerance band and pill | `#E31823` | p.12 |
+| Legrand Process Black | Headings, nominal tile, marker, active toggles, body emphasis | `#000000` | p.18-19 |
+| Legrand Red 032 | 6 px rule at the top of the header, 4 px rule above the footer, fail state | `#ED1D24` | p.18-19 |
+| Legrand gray (Process Black 60%) | Neutral pill, secondary labels | `#808285` | p.19 |
+| Dark gray | Unit labels, fractions, header subtitle | `#4D4D4F` | Derived neutral |
+| Mid gray | Input borders | `#A7A9AC` | Derived neutral |
+| Light gray | Secondary text on the black nominal tile | `#C7C8CA` | Derived neutral |
+| Page background | Behind the panels | `#F2F2F2` | Derived neutral |
+| 90% Black | Body text, scale ticks | `#404041` | Neutral |
+| 20% Black | Panel borders | `#D1D3D4` | Neutral |
+| Pass green | In-tolerance band and pill | `#2E9E46` | Status color, not a brand color |
+| Pass background | In-tolerance verdict bar | `#E2F3E6` | Status color |
+| Fail background | Out-of-tolerance verdict bar | `#FDE4E5` | Status color |
+
+Use Red 032 sparingly: the two rules and the fail state only. If red is used as a general accent, the page reads as "failed" everywhere.
 
 ### 5.2 Typography
 
-- Brand font is **Acumin Pro** (p.13). Use it if it is installed or licensed in your environment.
-- Web fallback: **Archivo** from Google Fonts (variable width). Use condensed widths (`font-stretch: 75-80%`) for headings and labels to match Acumin Pro Condensed.
+- No Legrand corporate typeface is specified in the source. Use **Archivo** from Google Fonts (variable width), falling back to Arial.
+- Use condensed widths (`font-stretch: 75-80%`) for headings and uppercase labels.
 - Use tabular numerals (`font-variant-numeric: tabular-nums`) for all numbers.
 - Uppercase labels get letter-spacing of about 0.14em.
+- If Legrand Marketing supplies a corporate font, swap it in.
 
-### 5.3 Logos
+### 5.3 Logo
 
 | Logo | Placement | Rules |
 |---|---|---|
-| Kenall logo, reversed white | Header, on the Kenall Blue band | Only approved colors: PMS 2767, black, 90% black, or reversed white on 2767/black (p.9). Clear space on all sides = 1/9 of logo width (p.8). Minimum width 3/4 in. Never stretch, recolor, or add effects (p.11). |
-| "A brand of Legrand" colored lockup | Footer, on white | Black symbol and text, Red 032 "legrand" (p.18-19). Keep clear space. |
+| Legrand logo, colored version (black symbol and ®, Red 032 "legrand") | Header, left, on white | Approved versions only: colored, negative (white on black), gray, or black (p.19). Keep clear space. Remove the ® below 1 in wide (p.18). Never stretch, recolor, or add effects. |
 
-- Get the logo files from Kenall Marketing. Do not redraw the logo.
-- Embed logos as base64 data URIs so the page stays one file.
-- **Approval:** Per p.3, anything with the Kenall logo needs written approval from Kenall Marketing (marketing@kenall.com) before distribution.
+- Get the logo file from Legrand Marketing. Do not redraw it.
+- Embed the logo as a base64 data URI so the page stays one file.
+- Do not use the "A brand of Legrand" lockup. It is for sub-brands, and this page is Legrand branded.
 
 ### 5.4 Theme
 
-Light theme only. The logo rules allow Kenall Blue only on white backgrounds, so do not build a dark mode.
+Light theme only. The colored Legrand logo is specified on white.
 
 ### 5.5 Page structure
 
-1. **Header band:** Kenall Blue, white logo on the left, "QUALITY ENGINEERING / Welding inspection tool" on the right.
-2. **Title:** "Weldment Squareness Check" plus a one-sentence description.
+1. **Header band:** white, 6 px Red 032 top rule, 1 px gray bottom border. Colored Legrand logo on the left (about 180 px wide). On the right: the EN | ES toggle, then "QUALITY ENGINEERING / Welding inspection tool" in black.
+2. **Title:** "Weldment Squareness Check" in black, plus a one-sentence description.
 3. **Two columns** (stack under 820 px wide): Inputs panel (about 340 px) on the left, Results panel on the right.
 4. **How to measure** panel, full width.
-5. **Footer:** white with a 4 px Kenall Blue top border. Left: "KENALL QUALITY ENGINEERING", "Questions or out-of-tolerance parts: contact the Quality team.", and the formula. Right: Legrand lockup.
+5. **Footer:** white with a 4 px Red 032 top border. Text only: "LEGRAND QUALITY ENGINEERING", "Questions or out-of-tolerance parts: contact the Quality team.", and the formula.
 
 ---
 
@@ -303,6 +310,7 @@ Light theme only. The logo rules allow Kenall Blue only on white backgrounds, so
 - [ ] On a phone: tap a field, type, tap Done, and the keypad closes.
 - [ ] On a phone: no horizontal page scrolling (only the scale scrolls inside its box).
 - [ ] Colors match Section 5.1 hex values.
-- [ ] Logos come from official files, keep clear space, and are not distorted.
+- [ ] The Legrand logo comes from an official file, keeps clear space, and is not distorted.
 - [ ] No emojis and no em dashes anywhere in the page text.
-- [ ] Kenall Marketing approval obtained before sharing outside Quality.
+- [ ] Legrand Marketing approval obtained for logo use before sharing outside Quality.
+- [ ] No Kenall or Pinnacle names or logos appear anywhere on the page.
